@@ -1,0 +1,4 @@
+django==3.0.14
+pillow==9.5.0
+gunicorn==21.2.0
+
