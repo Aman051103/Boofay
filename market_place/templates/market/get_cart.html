@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+</head>
+
+<body>
+    <form action="/market-place/user/{{user}}/cart/" method="post" id="get_cart_form">
+        {% csrf_token %}
+
+        <input type="hidden" name="cart" id="cart" value="{{cart}}">
+
+    </form>
+
+
+    <script>
+        $('#get_cart_form').submit();
+    </script>
+
+</body>
+
+</html>

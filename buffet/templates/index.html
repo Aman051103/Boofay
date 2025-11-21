@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <style>
+        body {
+            height: 100vh;
+            background: linear-gradient(to right bottom, rgb(255, 254, 252), white, rgb(255, 254, 252));
+            font-size: 1vw;
+        }
+
+        #choice-o {
+            padding: 6px 20%;
+        }
+
+        #choice-c {
+            padding: 6px 20%;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 25% 50% 25%;
+        }
+
+        .mid {
+            height: fit-content;
+            border: 1px solid rgb(190, 190, 190);
+            border-radius: 20px;
+        }
+
+        #user-type {
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 50%;
+        }
+
+        .class_disabled {
+            background: rgb(210, 223, 210);
+            color: rgb(150, 150, 150);
+            font-weight: 500;
+        }
+
+        .class_disabled:hover {
+            background: rgb(210, 223, 210);
+            color: rgb(150, 150, 150);
+            font-weight: 500;
+            cursor: not-allowed;
+        }
+
+        #disabled {
+            padding: 6px 10%;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1100px) {
+            #main {
+                display: grid;
+                grid-template-columns: 2% 96% 2%;
+            }
+
+            body {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 4vw;
+            }
+
+            #disabled {
+                padding: 3px 13%;
+                font-size: 3vw;
+            }
+
+            #choice-o {
+                padding: 2px 0%;
+                font-size: 3vw;
+            }
+
+            #choice-c {
+                padding: 2px 0%;
+                font-size: 3vw;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -6% -14%;"></a>
+        </div>
+    </nav>
+
+    {% for message in messages %}
+    <div class="container">
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+            {% if message.tags == 'danger' %}
+            <strong>Error:</strong> {{message}}
+            {% else %}
+            <strong>{{message.tags}}:</strong> {{message}}
+            {% endif %}
+            <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <div class="mt-5" id="main">
+        <div class="left"></div>
+
+        <div class="mid mx-5">
+            <div class="col-12 my-5">
+                <h2 style="display: block; text-align: center; margin: auto;" id="info01"></h2>
+            </div>
+
+            <div class="row" id="user-type">
+                <button class="btn btn-outline-success mb-3" id="choice-o"
+                    onclick="document.getElementById(this.id).classList.add('active'); document.getElementById('choice-c').classList.remove('active')">Owner</button>
+
+                <button class="btn btn-outline-success mb-4" id="choice-c"
+                    onclick="document.getElementById(this.id).classList.add('active'); document.getElementById('choice-o').classList.remove('active')">Customer</button>
+            </div>
+            <hr class="mb-4" style="margin-left: 15%; margin-right: 15%;">
+
+            <button class="btn rounded-pill d-block class_disabled" id="disabled"
+                style="text-align: center; margin: auto;">Create
+                Account</button>
+
+            <div class="mt-4 mx-5 mb-5" style="display: block; text-align: center; margin: auto;">
+                <p>Already have an account? <a href="/login-page" style="text-decoration: none;">Log In</a></p>
+            </div>
+        </div>
+
+        <div class="right"></div>
+
+
+
+
+
+
+        <!-- Optional JavaScript; choose one of the two! -->
+
+        <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+
+        <!-- Option 2: Separate Popper and Bootstrap JS -->
+        <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+        <script>
+            $('#choice-o').click(function () {
+                document.getElementById('disabled').classList.remove('class_disabled');
+                document.getElementById('disabled').classList.add('btn-success');
+                document.getElementById('disabled').style.color = 'white';
+                document.getElementById('disabled').style.cursor = 'pointer';
+                document.getElementById('disabled').style.padding = '3px 4%';
+                document.getElementById('disabled').innerHTML = 'Add your restaurant';
+
+                $('#disabled').click(function () {
+                    document.location = '/add-restaurant'
+                });
+            });
+
+            $('#choice-c').click(function () {
+                document.getElementById('disabled').classList.remove('class_disabled');
+                document.getElementById('disabled').classList.add('btn-success');
+                document.getElementById('disabled').style.color = 'white';
+                document.getElementById('disabled').style.cursor = 'pointer';
+                document.getElementById('disabled').style.padding = '3px 4%';
+                document.getElementById('disabled').innerHTML = 'Create customer account';
+
+                $('#disabled').click(function () {
+                    document.location = '/customer-signup'
+                });
+            });
+
+
+            var i = 0;
+            var txt = 'Join as a customer or restaurant owner';
+            var speed = 50;
+
+            function typeWriter() {
+                if (i < txt.length) {
+                    document.getElementById("info01").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+
+            typeWriter();
+        </script>
+</body>
+
+</html>

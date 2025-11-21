@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+
+    <title>Boofey</title>
+    <style>
+        #navigation {
+            padding-bottom: 13px;
+            padding-top: 12px;
+            border-bottom: 1px solid rgb(212, 208, 199);
+            background: rgb(255, 255, 253);
+            top: 0;
+            position: sticky;
+            z-index: 100;
+            opacity: 1;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 15% 70% 15%;
+        }
+
+        .navbar {
+            font-size: 1.2vw;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1000px) {
+            #main {
+                grid-template-columns: 6% 88% 6%;
+            }
+
+            body {
+                font-size: 3vw;
+            }
+
+            h6 {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                font-size: 4vw;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-dark">
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/root/user/{{request.user}}"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -8% -16%;"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: -4%;">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                            href="/root/user/{{request.user}}/{{rest}}/paids/">Paids</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/root/user/{{request.user}}/{{rest}}/unpaids/">UnPaids</a>
+                    </li>
+                </ul>
+
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <b>{{request.user}}</b>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item float-start" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+        {% if message.tags == 'danger' %}
+        <strong>Error:</strong> {{message}}
+        {% else %}
+        <strong>{{message.tags}}:</strong> {{message}}
+        {% endif %}
+        <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>
+    {% endfor %}
+
+
+
+    <div class="my-4" id="main">
+        <!-- left container -->
+        <div class="left">
+
+        </div>
+
+
+        <!-- middle container -->
+
+        <div class="mid mt-1">
+
+            <!-- All paid orders -->
+
+            <h3 class="mt-4 mb-5 text-success"
+                style="display: block; text-align: center; margin: auto; text-decoration: underline;">Total Paid
+                Orders({{orders|length}})</h3>
+
+            {% for order, parent, id, cost, date, payment_status, by in orders %}
+            <p class="text-danger" style="display: block; text-align: center; margin: auto;"><b>order
+                    {{forloop.counter}}</b> (Order-id: {{parent.dynamic_order_id}})</p>
+
+            <p class="text-secondary mb-4" style="display: block; text-align: center; margin: auto;"><b>(Dated:
+                    {{date}})</b></p>
+
+            <h6 style="text-decoration: underline;"><b>By - {{parent.ordered_by.first_name}}
+                    {{parent.ordered_by.last_name}}</b></h6>
+
+            <ol class="list-group list-group-numbered mt-1 mx-2 list-group-flush" style="padding-inline-start: 0px;">
+                {% for food, qty in order %}
+                <li class="list-group-item">
+                    <b class="text-primary"> {{food.name}}({{qty}}).</b>
+                    <br>
+                </li>
+                {% endfor %}
+
+                {% if payment_status == "UnPaid" %}
+                <p class="float-start mt-3"><b>Price: Rs. {{cost}}</b><span class="float-start"><b>Payment Status: <span
+                                class="text-danger">{{payment_status}}</span></b></span></p>
+                <p>Paid by: {{by}}</p>
+                {% else %}
+
+                <p class="float-start mt-3"><b>Price: Rs. {{cost}}</b><span class="float-start"><b>Payment Status: <span
+                                class="text-success">{{payment_status}}</span></b></span></p>
+                <p>Paid by: {{by}}</p>
+                {% endif %}
+            </ol>
+            <hr>
+            {% endfor %}
+
+            <h5>Total Paid Amount: Rs. {{paid_amount}}</h5>
+
+            <p
+                style="display: flex; align-items: center; justify-content: center; color: grey; font-size: 1.2vw; margin-top: 13%; opacity: 0.6; font-weight: 600;">
+                {{empty_cart_message}}</p>
+        </div>
+
+
+        <!-- right container -->
+        <div class="right px-3">
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+
+    <script>
+
+    </script>
+</body>
+
+</html>

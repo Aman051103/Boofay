@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <style>
+        #main {
+            display: grid;
+            grid-template-columns: 30% 40% 30%;
+        }
+
+        .mid {
+            height: fit-content;
+            border: 1px solid rgb(200, 200, 200);
+            border-radius: 20px;
+        }
+
+        #c_signup-inputs {
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 80%;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+        body {
+            height: 100vh;
+            font-size: 1vw;
+        }
+
+
+        @media only screen and (max-width: 1120px) {
+            #main {
+                display: grid;
+                grid-template-columns: 2% 96% 2%;
+            }
+
+            body {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 5vw;
+            }
+
+            #signup-button {
+                font-size: 3vw;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="/static/boofey-logo.png" alt="" style="width: 200px; height: 84px; margin: -6% -14%;"></a>
+        </div>
+    </nav>
+
+    {% for message in messages %}
+    <div class="container">
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+            {% if message.tags == 'danger' %}
+            <strong>Error:</strong> {{message}}
+            {% else %}
+            <strong>{{message.tags}}:</strong> {{message}}
+            {% endif %}
+            <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="mt-5" id="main">
+        <div class="left"></div>
+
+        <div class="mid mx-5">
+            <div class="col-12 my-5">
+                <h2 style="display: block; text-align: center; margin: auto;" id="info03"></h2>
+            </div>
+
+
+            <div class="row" id="c_signup-inputs">
+                <form action="/market-place/customer-signup-handle/" method="post"> {% csrf_token %}
+                
+                    <div class="row my-4">
+                        <div class="form-floating col-6">
+                            <input type="text" class="form-control" name="c_fname" id="c_fname" required>
+                            <label for="c_fname" class="mx-1">First Name</label>
+                        </div>
+
+                        <div class="form-floating col-6">
+                            <input type="text" class="form-control" name="c_lname" id="c_lname" required>
+                            <label for="c_lname" class="mx-1">Last Name</label>
+                        </div>
+                    </div>
+
+                    <div class="form-floating my-4">
+                        <input type="email" class="form-control" id="c_eamil" name="c_email" required>
+                        <label for="c_eamil" class="mx-1">Email address</label>
+                    </div>
+
+                    <div class="row my-4">
+                        <div class="form-floating col-6">
+                            <input type="password" class="form-control" id="c_pass1" name="c_pass1" required>
+                            <label for="c_pass1" class="mx-1">Password</label>
+                        </div>
+                        <div class="form-floating col-6">
+                            <input type="password" class="form-control" id="c_pass2" name="c_pass2" required>
+                            <label for="c_pass2" class="mx-1">Re-enter Password</label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success rounded-pill w-75 py-2 mt-4 mb-5" type="submit" id="signup-button">Create
+                        Account</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="right"></div>
+
+
+
+
+
+
+        <!-- Optional JavaScript; choose one of the two! -->
+
+        <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+
+        <!-- Option 2: Separate Popper and Bootstrap JS -->
+        <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+        <script>
+            var i = 0;
+            var txt = 'Please enter Your Details';
+            var speed = 50;
+
+            function typeWriter() {
+                if (i < txt.length) {
+                    document.getElementById("info03").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+
+            typeWriter();
+
+        </script>
+</body>
+
+</html>

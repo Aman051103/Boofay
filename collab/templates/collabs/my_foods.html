@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+
+    <title>Boofey</title>
+    <style>
+        #navigation {
+            padding-bottom: 13px;
+            padding-top: 12px;
+            border-bottom: 1px solid rgb(212, 208, 199);
+            background: rgb(255, 255, 253);
+            top: 0;
+            position: sticky;
+            z-index: 100;
+            opacity: 1;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 25% 25% 25% 25%;
+        }
+
+        .card {
+            width: 17rem;
+        }
+
+        .card img {
+            height: 200px;
+        }
+
+        .navbar {
+            font-size: 1.2vw;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1200px) {
+            #main {
+                display: grid;
+                grid-template-columns: 50% 50%;
+            }
+
+            .card {
+                width: 18rem;
+                height: fit-content;
+            }
+
+            .card img {
+                height: 200px;
+            }
+
+            body {
+                font-size: 1.5vw;
+            }
+
+            h6 {
+                font-size: 1.8vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                font-size: 2.2vw;
+            }
+        }
+
+
+        @media only screen and (max-width: 700px) {
+            #main {
+                grid-template-columns: 100%;
+            }
+
+            .card {
+                width: 18rem;
+                height: fit-content;
+            }
+
+            .card img {
+                height: 180px;
+            }
+
+            body {
+                font-size: 3vw;
+            }
+
+            h6 {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                font-size: 4vw;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-dark">
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -8% -16%;"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: -4%;">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/collab/restaurant/admin/{{username}}/data/">Data</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+
+                <form action="/collab/restaurant/admin/{{username}}/my-foods/" class="d-flex me-auto" role="search" method="post">{% csrf_token %}
+                    <input class="form-control rounded-pill me-4" type="search"
+                        placeholder="Eg.- main-course, non-veg, etc." aria-label="Search" name="food_search">
+                    <button class="btn btn-sm btn-outline-success ms-1 rounded-pill" type="submit">Search</button>
+                </form>
+
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <b>{{request.user}}</b>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item float-start" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+        {% if message.tags == 'danger' %}
+        <strong>Error:</strong> {{message}}
+        {% else %}
+        <strong>{{message.tags}}:</strong> {{message}}
+        {% endif %}
+        <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>
+    {% endfor %}
+
+
+    <div class="alert alert-success fade show my-0" role="alert" id="temporary-message" style="display: none;">
+        <strong>Success:</strong> Item added to cart successfully!
+    </div>
+
+
+
+    <div class="container my-4" id="main">
+
+        {% for i in foods %}
+        <div class="my-3" style="display: flex; align-items: center; justify-content: center;">
+            <div class="card my-3 mx-3">
+                <img src="/media/{{i.image}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-text text-success"><b>{{i.category}}</b></h5>
+                    <h6 class="card-text text-danger">{{i.name}}</h6>
+                    <p class="card-text">{{i.description|slice:"0:120"}}...</p>
+                </div>
+
+                <a class="nav-link dropdown-toggle mb-2" style="display: block; text-align: center; margin: auto;"
+                    href="" role="button" data-bs-toggle="collapse" data-bs-target="#item-{{i.food_id}}">
+                    Alter item availability
+                </a>
+
+                <div class="collapse mb-2" id="item-{{i.food_id}}">
+                    <form action="/collab/restaurant/admin/{{username}}/{{i.food_id}}/alter-item-availability/"
+                        class="mx-5 stock-form" method="post" id="form-{{i.food_id}}"> {% csrf_token %}
+
+
+                        {% if i.in_stock %}
+                        <input class="form-check-input yes" type="radio" name="stock-{{i.food_id}}"
+                            id="stock-{{i.food_id}}" value="yes" checked>
+                        <label class="form-check-label" for="stock-{{i.food_id}}">
+                            In Stock
+                        </label>
+
+                        <br>
+
+                        <input class="form-check-input no" type="radio" name="no-{{i.food_id}}" id="no-{{i.food_id}}" value="yes">
+                        <label class="form-check-label" for="no-{{i.food_id}}">
+                            Out of Stock
+                        </label>
+
+                        <br>
+
+                        {% else %}
+
+                        <input class="form-check-input yes" type="radio" name="stock-{{i.food_id}}"
+                            id="stock-{{i.food_id}}" value="yes">
+                        <label class="form-check-label" for="stock-{{i.food_id}}">
+                            In Stock
+                        </label>
+
+                        <br>
+                        
+                        <input class="form-check-input no" type="radio" name="no-{{i.food_id}}" id="no-{{i.food_id}}" value="yes" checked>
+                        <label class="form-check-label" for="no-{{i.food_id}}">
+                            Out of Stock
+                        </label>
+                        
+                        <br>
+                        {% endif %}
+
+
+
+                        <span class="text-primary save" id="save-{{i.food_id}}" style="cursor: pointer;"
+                            onmouseenter="document.getElementById(this.id).style.textDecoration = 'underline'"
+                            onmouseout="document.getElementById(this.id).style.textDecoration = 'none'">Save
+                            Changes</span>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="container" id="no_result">
+        <div class="d-flex mt-0 mb-5" style="align-items: center; justify-content: center;">
+            <img src="/media/foods/images/awSnap.webp" alt="" height="230px" width="300px">
+        </div>
+
+        <p aria-level="3" role="heading" style="padding-top:.33em"><b>Your search - </b> <span><em>{{query}}</em></span>
+            - did not match any documents.</p>
+
+        <p style="margin-top:1em">Suggestions:</p>
+        <ul style="margin-left:1.3em;margin-bottom:2em">
+            <li>Make sure that all words are spelled correctly.</li>
+            <li>Try different keywords.</li>
+            <li>Try more general keywords.</li>
+            <li>Try fewer keywords.</li>
+        </ul>
+    </div>
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+
+    <script>
+        console.log('{{foods}}')
+        if (parseInt('{{foods|length}}') > 0) {
+            $('#no_result').css('display', 'none');
+        }
+
+
+        $('.stock-form').on('click', 'input.yes', function () {
+            var id_string = this.id.toString();
+            id_string = id_string.slice(6,);
+
+            $(this.id).prop('checked', true);
+            $(`#no-${id_string}`).prop('checked', false);
+        });
+
+
+        $('.stock-form').on('click', 'input.no', function () {
+            var id_string = this.id.toString();
+            id_string = id_string.slice(3,);
+
+            $(this.id).prop('checked', true);
+            $(`#stock-${id_string}`).prop('checked', false);
+        });
+
+
+        $('.save').click(function(){
+            var id_string = this.id.toString();
+            id_string = id_string.slice(5,);
+
+            $(`#form-${id_string}`).submit();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+
+    <title>Boofey</title>
+    <style>
+        #navigation {
+            padding-bottom: 13px;
+            padding-top: 12px;
+            border-bottom: 1px solid rgb(212, 208, 199);
+            background: rgb(255, 255, 253);
+            top: 0;
+            position: sticky;
+            z-index: 100;
+            opacity: 1;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 15% 70% 15%;
+        }
+
+        .best_sellers {
+            background: rgb(255, 254, 252);
+        }
+
+        .best_sellers:hover {
+            background: rgb(255, 251, 245);
+            cursor: pointer;
+        }
+
+        .small {
+            display: none;
+        }
+
+        .navbar {
+            font-size: 1.2vw;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1000px) {
+            #main {
+                grid-template-columns: 6% 88% 6%;
+            }
+
+            .large {
+                display: none;
+            }
+
+            .small {
+                display: inline-block;
+            }
+
+            .food-menu img {
+                height: 24vw;
+                width: 28vw;
+            }
+
+
+            body {
+                font-size: 3vw;
+            }
+
+            h6 {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                font-size: 4vw;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-dark">
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -8% -16%;"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: -4%;">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                
+                <form action="/market-place/user/{{username}}/foods/" class="d-flex me-auto" role="search" method="get">
+                    <input class="form-control rounded-pill me-4" type="search" placeholder="Eg.- main-course, non-veg, etc."
+                        aria-label="Search" name="food_search">
+                    <button class="btn btn-sm btn-outline-success ms-1 rounded-pill" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+        {% if message.tags == 'danger' %}
+        <strong>Error:</strong> {{message}}
+        {% else %}
+        <strong>{{message.tags}}:</strong> {{message}}
+        {% endif %}
+        <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>
+    {% endfor %}
+
+
+    <div class="alert alert-success fade show my-0" role="alert" id="temporary-message" style="display: none;">
+        <strong>Success:</strong> Item added to cart successfully!
+    </div>
+
+
+
+    <div class="my-4" id="main">
+        <!-- left container -->
+        <div class="left">
+
+        </div>
+
+
+        <!-- middle container -->
+        <div class="mid mt-1">
+            <h3 style="display: block; margin: auto; text-align: center;text-decoration: underline;">{{category}}</h3>
+            <div class="list-group mt-4 food-menu">
+
+                {% for food in foods %}
+                <a class="list-group-item list-group-item-action best_sellers" aria-current="true">
+
+                    <div class="d-flex w-100 justify-content-between">
+                        <div>
+                            <img src="/media/{{food.image}}" alt="" width="135px" height="130px"
+                                style="border-radius: 10%;">
+
+                        </div>
+                        <div>
+                            <span><b> - {{food.by_restaurant.username}}</b></span><br>
+                            <div class="pe-2">
+                                <span>({{food.name}})</span>
+                                <p class="mb-0"><span>{{food.sub_category}}, {{food.category}}</span></p>
+
+                                <span class="badge bg-secondary rounded-pill mt-4">Rs. {{food.price}}</span>
+
+                                <span class="item" id="item{{food.food_id}}">
+                                    <button class="large btn btn-sm btn-outline-success rounded-pill cart"
+                                        id="food-{{food.food_id}}">Add to cart</button></span>
+
+                                <span class="item" id="item{{food.food_id}}">
+                                    <button class="small btn btn-sm btn-outline-success rounded-pill cart"
+                                        id="sm-food-{{food.food_id}}">Add to cart</button></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h6 class="my-2"><b>{{food.name}}</b></h6>
+                        <p>{{food.description|slice:":120"}}...</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <!-- right container -->
+        <div class="right px-3">
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+
+    <script>
+        if (localStorage.getItem("{{username}}'s cart") == null) {
+            var cart = {};
+        }
+
+        else {
+            cart = JSON.parse(localStorage.getItem("{{username}}'s cart"));
+        }
+
+
+        $('.item').on('click', 'button.cart', function () {
+            var id_string = this.id.toString();
+
+            if (id_string[0] == 's') {
+                id_string = id_string.slice(8,)
+            }
+
+            else {
+                id_string = id_string.slice(5,)
+            }
+
+            if (cart[id_string] != undefined) {
+                cart[id_string] = cart[id_string] + 1;
+            }
+
+            else {
+                cart[id_string] = 1;
+            }
+            localStorage.setItem("{{username}}'s cart", JSON.stringify(cart));
+
+
+            document.location = '#';
+            $("#temporary-message").fadeIn(0);
+            $("#temporary-message").fadeOut(2000);
+        });
+
+    </script>
+</body>
+
+</html>

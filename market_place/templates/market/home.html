@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <link rel = "icon" href = "/static/boofey-symbol.png" 
+        type = "image/x-icon">
+
+    <style>
+        body {
+            font-size: 1vw;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: 1.3vw;
+        }
+
+        img {
+            height: 6vw;
+            width: 6vw;
+        }
+
+        .restaurant img {
+            height: 8vw;
+            width: 9vw;
+        }
+
+        #navigation {
+            padding-bottom: 13px;
+            padding-top: 12px;
+            border-bottom: 1px solid rgb(212, 208, 199);
+            background: rgb(255, 255, 253);
+            top: 0;
+            position: sticky;
+            z-index: 100;
+            opacity: 1;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 26% 47% 27%;
+        }
+
+        .left {
+            top: 87px;
+            position: sticky;
+            height: fit-content;
+        }
+
+        .right01 {
+            top: 87px;
+            position: sticky;
+            height: 430px;
+        }
+
+        .best_sellers {
+            background: rgb(255, 255, 253);
+        }
+
+        .best_sellers:hover {
+            background: rgb(255, 251, 245);
+            cursor: pointer;
+        }
+
+        .restaurant {
+            background: rgb(255, 255, 253);
+        }
+
+        .restaurant:hover {
+            background: rgb(255, 250, 241);
+        }
+
+        .right02 {
+            display: none;
+        }
+
+        .menu {
+            overflow-x: scroll;
+            display: flex;
+            flex-direction: row;
+            /* justify-content: space-between; */
+        }
+
+        #cart-toggler {
+            display: none;
+        }
+
+        .navbar {
+            font-size: 1.2vw;
+        }
+
+        #submit_it:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+
+        .place_order {
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 100%;
+            background: rgb(250, 162, 0);
+            color: black;
+        }
+
+        .place_order:hover {
+            cursor: pointer;
+            background: rgb(240, 156, 0);
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1000px) {
+            #main {
+                padding: 0% 5%;
+                display: block;
+            }
+
+            #cart-toggler {
+                display: inline-block;
+            }
+
+            .right02 {
+                display: block;
+            }
+
+            .right02-scroll {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .right01 {
+                display: none;
+            }
+
+            .left {
+                display: none;
+            }
+
+            body {
+                font-size: 2vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 3vw;
+            }
+
+            img {
+                height: 12vw;
+                width: 12vw;
+            }
+
+            .restaurant img {
+                height: 15vw;
+                width: 16vw;
+            }
+
+            .right02 img {
+                height: 15vw;
+                width: 20vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -8% -16%;"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" style="margin-left: -4%;" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item" id="go_to_cart_home">
+                        <a class="nav-link" href="#">Cart(<span id="cart-total-home"></span>)</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+
+
+                <form action="/market-place/user/{{username}}/foods/" class="d-flex  me-auto" role="search"
+                    method="get">
+                    <label class="form-check-label my-auto me-4 text-danger" for="include"
+                        style="font-weight: 600;">*</label>
+
+                    <input class="form-check-input my-auto" style="border: 0.5px solid black;" type="checkbox"
+                        value="yes" id="include" name="include_rests">
+
+                    <input class="form-control rounded-pill me-2" type="search" placeholder="include restaurants by *"
+                        aria-label="Search" name="food_search">
+                    <button class="btn btn-sm btn-outline-success rounded-pill" type="submit">Search</button>
+                </form>
+
+
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <b>{{request.user}}</b>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item float-start" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+
+                {% else %}
+
+                <button class="btn btn-sm btn-danger mx-1" onclick="document.location = '/login-page'">login</button>
+                <button class="btn btn-sm btn-danger" onclick="document.location = '/'">sign-up</button>
+                {% endif %}
+
+            </div>
+        </div>
+    </nav>
+
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+        {% if message.tags == 'danger' %}
+        <strong>Error:</strong> {{message}}
+        {% else %}
+        <strong>{{message.tags}}:</strong> {{message}}
+        {% endif %}
+        <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>
+    {% endfor %}
+
+
+    <div class="alert alert-success fade show my-0" role="alert" id="temporary-message" style="display: none;">
+        <strong>Success:</strong> Item added to cart successfully!
+    </div>
+
+
+
+
+    <div class="my-4" id="main">
+
+        <!-- left container -->
+        <div class="left px-4 ms-2">
+
+            <h6>Pending orders ({{orders|length}}):</h6>
+
+            {% for order, id in orders %}
+            <p class="text-danger" style="display: block; text-align: center; margin: auto;"><b>order
+                    {{forloop.counter}}</b> (Order-id: {{id}})</p>
+
+            <ol class="list-group list-group-numbered mt-1 mx-2 list-group-flush" style="padding-inline-start: 0px;">
+                {% for foods, time, sub_order, contact, address, location in order %}
+                <li class="list-group-item">
+                    {% for food, qty in foods %}
+
+                    {% if forloop.counter == 1 %}
+                    <b style="text-decoration: underline;">{{food.by_restaurant}}</b><span> ({{contact}}) - </span>
+
+                    <p class="me-2 mt-1"><b>Venue: </b>{{address}}, {{location}}</p>
+                    {% endif %}
+
+                    {% if forloop.counter == 1 %}
+                    {% if forloop.counter == foods|length %}
+                    <b>- {{food.name}}({{qty}}).</b>
+                    {% else %}
+                    <b>- {{food.name}}({{qty}}), </b>
+                    {% endif %}
+                    {% elif forloop.counter == foods|length %}
+                    <b>{{food.name}}({{qty}}).</b>
+                    {% else %}
+                    <b>{{food.name}}({{qty}}), </b>
+                    {% endif %}
+
+                    {% endfor %}
+                    <br>
+
+                    {% if sub_order.preparation_status %}
+                    <span class="badge bg-success text-light rounded-pill px-2 py-2 mt-1"
+                        style="font-size: 0.9vw; color: aliceblue;">Prepared...</span>
+
+                    <div class="form-check float-start mt-2 received" id="del{{sub_order.sub_order_id}}">
+                        <input class="form-check-input float-end delivered" type="checkbox" value=""
+                            id="delivered-{{sub_order.sub_order_id}}" name="delivered">
+                        <label class="form-check-label me-4" for="delivered-{{sub_order.sub_order_id}}">
+                            Delivered?
+                        </label>
+                    </div>
+
+                    <div class="form-check float-start mt-2 received" id="con{{sub_order.sub_order_id}}"
+                        style="display: none;">
+                        <input class="form-check-input float-end confirmed" type="checkbox" value=""
+                            id="confirmed-{{sub_order.sub_order_id}}" name="confirmed">
+                        <label class="form-check-label me-4" for="confirmed-{{sub_order.sub_order_id}}">
+                            Are you sure?
+                        </label>
+
+                        <input class="form-check-input float-start mt-1 no" type="checkbox" value=""
+                            id="no-{{sub_order.sub_order_id}}" name="no">
+                        <label class="form-check-label me-4" for="no-{{sub_order.sub_order_id}}">
+                            No
+                        </label>
+                    </div>
+
+                    {% else %}
+
+                    <span class="badge bg-success text-light rounded-pill px-3 py-2 float-start mt-1"
+                        style="font-size: 0.9vw; color: aliceblue;">Preparation time - {{time}} minutes</span>
+                    {% endif %}
+
+                </li>
+                {% endfor %}
+            </ol>
+            <hr>
+            {% endfor %}
+
+            <p
+                style="display: flex; align-items: center; justify-content: center; color: grey; font-size: 1.2vw; margin-top: 13%; opacity: 0.6; font-weight: 600;">
+                {{empty_cart_message}}</p>
+        </div>
+
+
+        <!-- middle container -->
+        <div class="mid mt-4">
+            <h5 class="mb-3">Explore menu -</h5>
+
+            <div class="mx-3 menu">
+                {% for category, food in menu %}
+                <a href="/market-place/menu/{{category}}" class="list-group-item list-group-item-action"
+                    aria-current="true">
+
+                    <img src="/media/{{food.0.image}}" width="87" height="87" style="border-radius: 50%;" alt="not available">
+
+                    <p class="mt-1 me-1"><b>{{category}}</b></p>
+                </a>
+                {% endfor %}
+            </div>
+            <!-- <hr class="ms-2"> -->
+
+
+            <!-- orders for small devices -->
+            <a class="nav-link dropdown-toggle mt-3 mx-1" href="" role="button" data-bs-toggle="collapse"
+                data-bs-target="#cart" id="cart-toggler">
+                <h6 style="display: inline-block;"><b>Pending Orders ({{orders|length}})</b></h6>
+            </a>
+
+            <div class="collapse mx-4" id="cart">
+
+                {% for order, id in orders %}
+                <p class="text-danger" style="display: block; text-align: center; margin: auto;"><b>order
+                        {{forloop.counter}}</b>(Order_id: {{id}})</p>
+
+                <ol class="list-group list-group-numbered mt-1 mx-2 list-group-flush"
+                    style="padding-inline-start: 0px;">
+                    {% for foods, time, sub_order, contact, address, location in order %}
+                    <li class="list-group-item">
+                        {% for food, qty in foods %}
+
+                        {% if forloop.counter == 1 %}
+                        <b style="text-decoration: underline;">{{food.by_restaurant}}</b><span> ({{contact}}) - </span>
+
+                        <p class="me-2 mt-1"><b>Venue: </b>{{address}}, {{location}}</p>
+                        {% endif %}
+
+                        {% if forloop.counter == 1 %}
+                        {% if forloop.counter == foods|length %}
+                        <b>- {{food.name}}({{qty}}).</b>
+                        {% else %}
+                        <b>- {{food.name}}({{qty}}), </b>
+                        {% endif %}
+                        {% elif forloop.counter == foods|length %}
+                        <b>{{food.name}}({{qty}}).</b>
+                        {% else %}
+                        <b>{{food.name}}({{qty}}), </b>
+                        {% endif %}
+
+                        {% endfor %}
+                        <br>
+
+
+                        {% if sub_order.preparation_status %}
+                        <span class="badge bg-success text-light rounded-pill px-1 py-1 mt-1"
+                            style="font-size: 0.9vw; color: aliceblue;">Prepared...</span>
+
+                        <div class="form-check float-start mt-1 received" id="sm-del{{sub_order.sub_order_id}}">
+                            <input class="form-check-input float-end delivered" type="checkbox" value=""
+                                id="sm-delivered-{{sub_order.sub_order_id}}" name="delivered">
+                            <label class="form-check-label me-4" for="sm-delivered-{{sub_order.sub_order_id}}">
+                                Delivered?
+                            </label>
+                        </div>
+
+                        <div class="form-check float-start mt-1 received" id="sm-con{{sub_order.sub_order_id}}"
+                            style="display: none;">
+                            <input class="form-check-input float-end confirmed" type="checkbox" value=""
+                                id="sm-confirmed-{{sub_order.sub_order_id}}" name="confirmed">
+                            <label class="form-check-label me-4" for="sm-confirmed-{{sub_order.sub_order_id}}">
+                                Are you sure?
+                            </label>
+
+                            <input class="form-check-input float-start no" type="checkbox" value=""
+                                id="sm-no-{{sub_order.sub_order_id}}" name="no">
+                            <label class="form-check-label me-4" for="sm-no-{{sub_order.sub_order_id}}">
+                                No
+                            </label>
+                        </div>
+
+                        {% else %}
+
+                        <span class="badge bg-success text-light rounded-pill px-2 py-1 float-start mt-1"
+                            style="font-size: 0.9vw; color: aliceblue;">Preparation time - {{time}} minutes</span>
+                        {% endif %}
+
+                    </li>
+                    {% endfor %}
+                </ol>
+                <hr>
+                {% endfor %}
+
+                <p
+                    style="display: flex; align-items: center; justify-content: center; color: grey; font-size: 1.2vw; margin-top: 5%; opacity: 0.7; font-weight: 600;">
+                    {{empty_cart_message}}</p>
+            </div>
+
+
+
+            <!-- best-sellers for small devices -->
+            <div class="right02 mt-5">
+                <h5>Our best sellers:</h5>
+
+                <div class="list-group me-2 mt-3 right02-scroll"
+                    style="height: 60%; overflow-y: scroll; border-top: 1px solid rgb(185, 185, 185); border-bottom: 1px solid rgb(185, 185, 185); border-radius: 10px;">
+
+                    {% for i in best_sellers %}
+                    <a class="list-group-item list-group-item-action best_sellers" aria-current="true">
+
+                        <div class="d-flex flex-column w-100 justify-content-between">
+                            <div>
+                                <img src="/media/{{i.image}}" alt="" width="104px" height="100px"
+                                    style="border-radius: 10%;">
+
+                            </div>
+                            <div style="display: block; margin: auto; text-align: center;">
+                                <span><b>{{i.by_restaurant.username}}</b></span><br>
+                                <div>
+                                    <span>({{i.name}})</span>
+                                    <p class="mb-0"><small>{{i.sub_category}}, {{i.category}}</small></p>
+                                    <span class="badge bg-secondary rounded-pill">Rs. {{i.price}}</span>
+
+                                    <span class="badge bg-secondary rounded-pill px-2" id="sm-food-{{i.food_id}}"
+                                        onclick="document.getElementById(`${this.id}_desc`).style.display = 'block'; document.getElementById(this.id).style.display = 'none'; document.getElementById(`${this.id}_buy`).style.display = 'inline-block'">show
+                                        more</span>
+
+                                    <span style="display: none;" class="badge bg-success rounded-pill buy"
+                                        id="sm-food-{{i.food_id}}_buy">Buy now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sm-food-{{i.food_id}}_desc" style="display: none;">
+                            <h6 class="my-2">{{i.name}}</h6>
+                            <small>{{i.description|slice:":60"}}...</small>
+
+                            <small class="float-start text-primary" id="sm-food-{{i.food_id}}_hide"
+                                onclick="document.getElementById('sm-food-{{i.food_id}}_desc').style.display = 'none'; document.getElementById('sm-food-{{i.food_id}}').style.display = 'inline-block'; document.getElementById('sm-food-{{i.food_id}}_buy').style.display = 'none'">hide...</small>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
+            <!-- Restaurants -->
+            <h5 class="mt-5 pt-2">Restaurants -</h5>
+
+            <div class="list-group mt-2">
+                {% for restaurant in restaurants %}
+                <a href="/market-place/restaurant/{{restaurant.parent.username}}"
+                    class="list-group-item list-group-item-action restaurant me-1" aria-current="true">
+
+                    <div class="d-flex w-100 justify-content-between">
+                        <div class="col-4">
+                            <img src="/media/{{restaurant.image}}" alt="" width="75%" height="160px"
+                                style="border-radius: 8%;">
+                            <h5 class="mt-2 mb-4 ms-2 text-danger">{{restaurant.parent.username}}</h5>
+                        </div>
+                        <div class="mt-1 col-8">
+                            <h6 class="mb-1">{{restaurant.address}}</h6>
+                            <p>- {{restaurant.location}}</p>
+
+                            <p class="badge bg-success rounded-pill">Published:
+                                {{restaurant.date_of_registration}}</p>
+
+                            {% if current_time > restaurant.closing_time_hours or current_time < restaurant.opening_time_hours %}
+
+                            <p class="my-0"><b>The restaurant is closed. It will be opened at {{restaurant.opening_time_hours}}am./ upcoming morning</b></p>
+
+                            {% endif %}
+
+                            <span><b>Opening time:</b> {{restaurant.opening_time_hours}} o'clock, <b>Closing time:</b> {{restaurant.closing_time_hours}} o'clock.</span>
+                        </div>
+                    </div>
+
+                    <p class="mb-2 mt-3">{{restaurant.about|slice:":160"}}...</p>
+                    <p class="mb-1"><b>Phone - </b>{{restaurant.guardian_phone_number}}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <!-- right container -->
+        <div class="right01 px-3">
+            <h5>Our best sellers:</h5>
+
+            <div class="list-group me-2 mt-3"
+                style="height: 100%; overflow-y: scroll; border-top: 1px solid rgb(185, 185, 185); border-bottom: 1px solid rgb(185, 185, 185); border-radius: 10px;">
+
+                {% for i in best_sellers %}
+                <a class="list-group-item list-group-item-action best_sellers" aria-current="true">
+
+                    <div class="d-flex w-100 justify-content-between">
+                        <div class="col-5">
+                            <img src="/media/{{i.image}}" alt="" width="104px" height="100px"
+                                style="border-radius: 10%;">
+
+                        </div>
+                        <div class="col-7">
+                            <span><b> - {{i.by_restaurant.username}}</b></span><br>
+                            <div>
+                                <span>({{i.name}})</span>
+                                <p class="mb-0"><small>{{i.sub_category}}, {{i.category}}</small></p>
+                                <span class="badge bg-secondary rounded-pill">Rs. {{i.price}}</span>
+
+                                <span class="badge bg-secondary rounded-pill px-2" id="food-{{i.food_id}}"
+                                    onclick="document.getElementById(`${this.id}_desc`).style.display = 'block'; document.getElementById(this.id).style.display = 'none'; document.getElementById(`${this.id}_buy`).style.display = 'inline-block'">show
+                                    more</span>
+
+                                <span style="display: none;" class="badge bg-success rounded-pill buy"
+                                    id="food-{{i.food_id}}_buy">Buy now</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="food-{{i.food_id}}_desc" style="display: none;">
+                        <h6 class="my-2">{{i.name}}</h6>
+                        <small>{{i.description|slice:":60"}}...</small>
+
+                        <small class="float-start text-primary" id="food-{{i.food_id}}_hide"
+                            onclick="document.getElementById('food-{{i.food_id}}_desc').style.display = 'none'; document.getElementById('food-{{i.food_id}}').style.display = 'inline-block'; document.getElementById('food-{{i.food_id}}_buy').style.display = 'none'">hide...</small>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+
+    <script>
+        var my_cart;
+
+        if (localStorage.getItem("{{username}}'s cart") == null) {
+            var cart = {};
+            my_cart = 'empty';
+        }
+
+        else {
+            cart = JSON.parse(localStorage.getItem("{{username}}'s cart"));
+            my_cart = '';
+
+            var i = 0;
+            var cart_total = 0;
+            for (i; i < Object.keys(cart).length; i++) {
+                var j = Object.values(cart)[i];
+                cart_total = cart_total + j
+
+                var k = Object.keys(cart)[i]
+                my_cart += `${k}:${j},`
+            }
+            document.getElementById('cart-total-home').innerHTML = cart_total;
+        }
+
+        $('#go_to_cart_home').click(function () {
+            if (my_cart == 'empty') {
+                alert(`Your Cart is Empty. Kindly add some items to see the cart.`);
+            }
+            else {
+                document.location = `/market-place/user/{{username}}/H@3Lp47W!rDz2Fq1xG[9]VcYbT%nAeXoQpI)uJ!kM6lNz8RcSvDfUjXyZtEiOaBsHgFpVdWmJkLnZbQsYeXrAtUvIoCmEfGz/${my_cart}`
+            }
+        });
+
+
+        $('.buy').click(function () {
+            var id_string = this.id.toString();
+
+            if (id_string[0] == 's') {
+                id_string = id_string.slice(8, -4)
+            }
+
+            else {
+                id_string = id_string.slice(5, -4)
+            }
+
+            if (cart[id_string] != undefined) {
+                cart[id_string] = cart[id_string] + 1;
+            }
+
+            else {
+                cart[id_string] = 1;
+            }
+            localStorage.setItem("{{username}}'s cart", JSON.stringify(cart));
+        });
+
+
+        $('.buy').click(function () {
+            document.location = '#';
+            $("#temporary-message").fadeIn(0);
+            $("#temporary-message").fadeOut(2000);
+            setTimeout(reload_page, 1100);
+        });
+
+        function reload_page() {
+            document.location = '/';
+        }
+
+
+
+        $('.received').on('click', 'input.delivered', function () {
+            var id_string = this.id.toString();
+            if (id_string[0] == 's') {
+                id_string = id_string.slice(13,);
+
+                $(`#sm-no-${id_string}`).prop('checked', false);
+
+                $(`#sm-del${id_string}`).fadeOut(1500);
+                $(`#sm-con${id_string}`).fadeIn(2500);
+            }
+            else {
+                id_string = id_string.slice(10,);
+
+                $(`#no-${id_string}`).prop('checked', false);
+
+                $(`#del${id_string}`).fadeOut(1500);
+                $(`#con${id_string}`).fadeIn(2500);
+            }
+        });
+
+
+        $('.received').on('click', 'input.no', function () {
+            var id_string = this.id.toString();
+            if (id_string[0] == 's') {
+                id_string = id_string.slice(6,);
+
+                $(`#sm-delivered-${id_string}`).prop('checked', false);
+
+                $(`#sm-con${id_string}`).fadeOut(5);
+                $(`#sm-del${id_string}`).fadeIn(1000);
+            }
+            else {
+                id_string = id_string.slice(3,);
+
+                $(`#delivered-${id_string}`).prop('checked', false);
+
+                $(`#del${id_string}`).fadeIn(1000);
+                $(`#con${id_string}`).fadeOut(5);
+            }
+        });
+
+
+        $('.received').on('click', 'input.confirmed', function () {
+            var id_string = this.id.toString();
+            var item;
+            if (id_string[0] == 's') {
+                id_string = id_string.slice(13,);
+                item = id_string;
+            }
+            else {
+                id_string = id_string.slice(10,);
+                item = id_string;
+            }
+
+            id_string = parseInt(id_string);
+            id_string = Math.pow(id_string, id_string - id_string / 2 - 1);
+            id_string = item + ' ' + id_string.toString();
+
+            document.location = `/market-place/user/{{username}}/${id_string}food-receive-confirmation/`;
+        });
+    </script>
+</body>
+
+</html>

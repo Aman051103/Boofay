@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <style>
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1120px) {
+            #send-button {
+                font-size: 3vw;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -6% -14%;"></a>
+        </div>
+    </nav>
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+        {% if message.tags == 'danger' %}
+        <strong>Error:</strong> {{message}}
+        {% else %}
+        <strong>{{message.tags}}:</strong> {{message}}
+        {% endif %}
+        <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>
+    {% endfor %}
+
+
+    <div class="container my-4">
+        <div class="col-12 my-5">
+            <h1 style="display: block; text-align: center; margin: auto; text-decoration: underline; color: darkblue;"
+                id="info03"></h1>
+        </div>
+
+
+        <form action="/feeds/sending-query/" method="post"> {% csrf_token %}
+            <div class="mb-4 mx-5">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name" required>
+            </div>
+            <div class="mb-4 mx-5">
+                <label for="E-mail" class="form-label">E-mail:</label>
+                <input type="email" class="form-control" id="E-mail" name="e-mail" placeholder="Enter Your E-mail"
+                    required>
+            </div>
+            <div class="mb-4 mx-5">
+                <label for="phone" class="form-label">Phone number:</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter Your Mobile no."
+                    required>
+            </div>
+
+            <div class="mb-4 mx-5">
+                <label for="Query" class="form-label">How may we help:</label>
+                <textarea class="form-control" placeholder="Leave your query here..." id="Query" name="query"
+                    style="height: 100px" required></textarea>
+            </div>
+
+            <button type="submit" id="send_button" class="mx-5 btn btn-success">Send</button>
+        </form>
+
+    </div>
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+    <script>
+        var i = 0;
+        var txt = 'Send us your query by filling the following details';
+        var speed = 50;
+
+        function typeWriter() {
+            if (i < txt.length) {
+                document.getElementById("info03").innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+
+        typeWriter();
+
+    </script>
+</body>
+
+</html>

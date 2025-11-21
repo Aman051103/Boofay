@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <style>
+        body {
+            font-size: 1vw;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: 1.3vw;
+        }
+
+        .row img {
+            height: 5.5vw;
+            width: 8vw;
+            border-radius: 15%;
+        }
+
+
+        #navigation {
+            padding-bottom: 13px;
+            padding-top: 12px;
+            border-bottom: 1px solid rgb(212, 208, 199);
+            background: rgb(255, 255, 253);
+            top: 0;
+            position: sticky;
+            z-index: 100;
+            opacity: 1;
+            font-size: 1.2vw;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 30% 40% 30%;
+        }
+
+
+        #submit_it:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .place_order {
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 100%;
+            background: rgb(250, 162, 0);
+            color: black;
+        }
+
+        .place_order:hover {
+            cursor: pointer;
+            background: rgb(240, 156, 0);
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+
+        @media only screen and (max-width: 1000px) {
+            #main {
+                padding: 0% 20%;
+                display: block;
+            }
+
+
+            body {
+                font-size: 2vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 3vw;
+            }
+
+            .row img {
+                height: 8vw;
+                width: 13vw;
+                border-radius: 16px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -8% -16%;"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" style="margin-left: -4%;" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item" id="go_to_cart">
+                        <a class="nav-link active" href="#">Cart</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                
+                <form action="/market-place/user/{{username}}/foods/" class="d-flex me-auto" role="search" method="get">
+                    <input class="form-control rounded-pill me-4" type="search" placeholder="Eg.- Shakes, pizza, etc."
+                        aria-label="Search" name="food_search">
+                    <button class="btn btn-sm btn-outline-success ms-1 rounded-pill" type="submit">Search</button>
+                </form>
+
+
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <b>{{request.user}}</b>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item float-start" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+
+                {% else %}
+
+                <button class="btn btn-sm btn-danger mx-1" onclick="document.location = '/login-page'">login</button>
+                <button class="btn btn-sm btn-danger" onclick="document.location = '/'">sign-up</button>
+                {% endif %}
+
+            </div>
+        </div>
+    </nav>
+
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+        {% if message.tags == 'danger' %}
+        <strong>Error:</strong> {{message}}
+        {% else %}
+        <strong>{{message.tags}}:</strong> {{message}}
+        {% endif %}
+        <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>
+    {% endfor %}
+
+
+
+    <div class="my-4" id="main">
+
+        <div></div>
+
+        <!-- cart container -->
+        <div class="cart px-3 mt-4">
+            <h5 style="display: block; margin: auto; text-align: center; text-decoration: underline;">Cart(<span
+                    id="cart-total"></span>)</h5>
+
+
+            <ol class="list-group list-group-numbered mt-4"
+                style="padding-inline-start: 0px; height: 65vh; overflow-y: scroll; border-top: 1px solid rgb(185, 185, 185); border-bottom: 1px solid rgb(185, 185, 185); border-radius: 10px;">
+
+                {% for food, qty in items %}
+                <li class="list-group-item">
+                    <div class="row mt-2">
+                        <img class="" src="/media/{{food.image}}" alt="...">
+                        <div class="float-start">
+                            <b>{{food.name}}</b>
+                            <!-- <p class="mb-0">{{food.category}}, {{food.sub_category}}.</p> -->
+                            <p class="text-danger">{{food.by_restaurant.username}}</p>
+
+                            <div class="float-start change-qty">
+                                <button id="minus-{{food.food_id}}" class="btn btn-sm btn-light minus"> <b>-</b>
+                                </button>
+
+                                <span id="qty1-{{food.food_id}}"></span>
+
+                                <button id="plus-{{food.food_id}}" class="btn btn-light btn-sm plus"> <b>+</b> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="badge bg-success text-light rounded-pill mt-2">Quantity: <span
+                            id="qty2-{{food.food_id}}"></span></span>
+                </li>
+                {% endfor %}
+
+
+                <form action="/market-place/place-order/" method="post" id="place_order_form">
+                    {% csrf_token %}
+                    <input type="hidden" name="placed_orders" id="placed_orders" value="{{orders_list}}">
+                </form>
+
+
+                <div class="my-3" style="display: flex; justify-content: space-evenly; align-items: center;">
+
+                    <span class="btn btn-sm btn-danger" id="update_cart">Update Cart</span>
+
+                    <span class="btn btn-sm btn-danger" id="clear_cart">Clear Cart</span>
+                </div>
+
+                <p class="py-2 place_order" id="place_order">Place Order. <b>(Rs. {{cost}})</b></p>
+            </ol>
+        </div>
+
+        <div></div>
+    </div>
+
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+
+    <script>
+        var my_cart;
+
+        if (localStorage.getItem("{{username}}'s cart") == null) {
+            var cart = {};
+            my_cart = 'empty';
+        }
+
+        else {
+            cart = JSON.parse(localStorage.getItem("{{username}}'s cart"));
+            my_cart = '';
+
+            var i = 0;
+            var cart_total = 0;
+            for (i; i < Object.keys(cart).length; i++) {
+                var j = Object.values(cart)[i];
+                cart_total = cart_total + j
+
+                var k = Object.keys(cart)[i]
+                my_cart += `${k}:${j},`
+            }
+            document.getElementById('cart-total').innerHTML = cart_total;
+        }
+
+
+        $('#place_order').click(function () {
+            document.getElementById("place_order_form").submit();
+            localStorage.removeItem("{{username}}'s cart");
+        });
+
+
+        $('#clear_cart').click(function () {
+            localStorage.removeItem("{{username}}'s cart");
+            document.location = `/`;
+        });
+
+
+        $('#go_to_cart').click(function () {
+            if (my_cart == 'empty') {
+                alert(`Your Cart is Empty. Kindly add some items to see the cart.`);
+            }
+            else {
+                document.location = `/market-place/user/{{username}}/H@3Lp47W!rDz2Fq1xG[9]VcYbT%nAeXoQpI)uJ!kM6lNz8RcSvDfUjXyZtEiOaBsHgFpVdWmJkLnZbQsYeXrAtUvIoCmEfGz/${my_cart}`
+            }
+        });
+
+
+        for (var item in cart) {
+            document.getElementById(`qty1-${item}`).innerHTML = cart[item];
+            document.getElementById(`qty2-${item}`).innerHTML = cart[item];
+        }
+
+
+
+        $('.change-qty').on('click', 'button.minus', function () {
+            cart[this.id.slice(6,)] -= 1;
+            var local = Math.max(0, cart[this.id.slice(6,)]);
+
+            if (local == 0) {
+                if (Object.keys(cart).length == 1) {
+                    localStorage.removeItem("{{username}}'s cart");
+                    my_cart = 'empty';
+                    document.location = '/';
+                }
+
+                else {
+                    delete cart[this.id.slice(6,)];
+                    localStorage.setItem("{{username}}'s cart", JSON.stringify(cart));
+
+                    my_cart = '';
+
+                    var i = 0;
+                    var cart_total = 0;
+                    for (i; i < Object.keys(cart).length; i++) {
+                        var j = Object.values(cart)[i];
+                        cart_total = cart_total + j
+
+                        var k = Object.keys(cart)[i]
+                        my_cart += `${k}:${j},`
+                    }
+                    $('#update_cart').click();
+                }
+            }
+            else {
+                cart[this.id.slice(6,)] = local;
+                localStorage.setItem("{{username}}'s cart", JSON.stringify(cart));
+
+                my_cart = '';
+
+                var i = 0;
+                var cart_total = 0;
+                for (i; i < Object.keys(cart).length; i++) {
+                    var j = Object.values(cart)[i];
+                    cart_total = cart_total + j
+
+                    var k = Object.keys(cart)[i]
+                    my_cart += `${k}:${j},`
+                }
+                $('#update_cart').click();
+            }
+        });
+
+
+        $('.change-qty').on('click', 'button.plus', function () {
+            if (cart[this.id.slice(5,)] != undefined) {
+                cart[this.id.slice(5,)] = cart[this.id.slice(5,)] + 1;
+            }
+
+            else {
+                cart[this.id.slice(5,)] = 1;
+            }
+
+            localStorage.setItem("{{username}}'s cart", JSON.stringify(cart));
+
+            my_cart = '';
+
+            var i = 0;
+            var cart_total = 0;
+            for (i; i < Object.keys(cart).length; i++) {
+                var j = Object.values(cart)[i];
+                cart_total = cart_total + j
+
+                var k = Object.keys(cart)[i]
+                my_cart += `${k}:${j},`
+            }
+
+            $('#update_cart').click();
+        });
+
+
+        $('#update_cart').click(function () {
+            document.location = `/market-place/user/{{username}}/H@3Lp47W!rDz2Fq1xG[9]VcYbT%nAeXoQpI)uJ!kM6lNz8RcSvDfUjXyZtEiOaBsHgFpVdWmJkLnZbQsYeXrAtUvIoCmEfGz/${my_cart}`;
+        });
+    </script>
+</body>
+
+</html>

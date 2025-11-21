@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <style>
+        #main {
+            display: grid;
+            grid-template-columns: 30% 40% 30%;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+        #signup-button {
+            padding: 5px 16%;
+        }
+
+        #login-button {
+            padding: 8px 40%;
+        }
+
+        .mid {
+            height: fit-content;
+            border: 1px solid rgb(200, 200, 200);
+            border-radius: 20px;
+        }
+
+        #login-inputs {
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 70%;
+        }
+
+        body {
+            height: 100vh;
+            font-size: 1vw;
+        }
+
+
+        @media only screen and (max-width: 1120px) {
+            #main {
+                display: grid;
+                grid-template-columns: 2% 96% 2%;
+            }
+
+            body {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 5vw;
+            }
+
+            #login-inputs {
+                width: 80%;
+            }
+
+            #login-button {
+                padding: 3px 15%;
+                font-size: 3vw;
+            }
+            
+            #signup-button {
+                padding: 3px 10%;
+                font-size: 3vw;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -6% -14%;"></a>
+        </div>
+    </nav>
+
+    {% for message in messages %}
+    <div class="container">
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+            {% if message.tags == 'danger' %}
+            <strong>Error:</strong> {{message}}
+            {% else %}
+            <strong>{{message.tags}}:</strong> {{message}}
+            {% endif %}
+            <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <div class="mt-5" id="main">
+        <div class="left"></div>
+
+        <div class="mid mx-5">
+            <div class="col-12 my-5">
+                <h2 style="display: block; text-align: center; margin: auto;">Authenticate</h2>
+            </div>
+
+
+            <div class="row" id="login-inputs">
+                <form action="/root/root-login-handle/" method="post"> {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" name="login-username" class="form-control" id="login-username"
+                            placeholder="Customer/Restaurant Username" required>
+                    </div>
+                    <div class="mb-4">
+                        <input type="password" name="login-password" class="form-control" id="login-password"
+                            placeholder="Password" required></input>
+                    </div>
+
+                    <button type="submit" class="btn btn-success rounded-pill d-block my-5"
+                        style="text-align: center; margin: auto;" id="login-button">log in</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="right"></div>
+
+
+
+
+
+
+        <!-- Optional JavaScript; choose one of the two! -->
+
+        <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+
+        <!-- Option 2: Separate Popper and Bootstrap JS -->
+        <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+        <script>
+
+        </script>
+</body>
+
+</html>

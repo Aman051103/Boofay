@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <title>Boofey</title>
+
+    <style>
+        #main {
+            display: grid;
+            grid-template-columns: 30% 40% 30%;
+        }
+
+        .mid {
+            height: fit-content;
+            border: 1px solid rgb(200, 200, 200);
+            border-radius: 20px;
+        }
+
+        #c_signup-inputs {
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 80%;
+        }
+
+        .alert-dismissible .btn-close {
+            left: unset;
+        }
+
+        .alert-dismissible {
+            padding-left: 1rem;
+        }
+
+        body {
+            height: 100vh;
+            font-size: 1vw;
+        }
+
+
+        @media only screen and (max-width: 1120px) {
+            #main {
+                display: grid;
+                grid-template-columns: 2% 96% 2%;
+            }
+
+            body {
+                font-size: 3vw;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 5vw;
+            }
+
+            #signup-button {
+                font-size: 3vw;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" id="navigation">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="/static/boofey-logo.png" alt=""
+                    style="width: 200px; height: 84px; margin: -6% -14%;"></a>
+        </div>
+    </nav>
+
+    {% for message in messages %}
+    <div class="container">
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show my-0" role="alert">
+            {% if message.tags == 'danger' %}
+            <strong>Error:</strong> {{message}}
+            {% else %}
+            <strong>{{message.tags}}:</strong> {{message}}
+            {% endif %}
+            <button type="button" style="right: 0;" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="mt-5" id="main">
+        <div class="left"></div>
+
+        <div class="mid mx-5">
+            <div class="col-12 my-5">
+                <h2 style="display: block; text-align: center; margin: auto;text-decoration: underline;">Add Profile</h2>
+            </div>
+
+
+            <div class="row" id="c_signup-inputs">
+                <form action="/market-place/user/{{request.user}}/profile/" method="post"> {% csrf_token %}
+
+                    <div class="form-floating col-12">
+                        <input type="tel" class="form-control" name="phone" id="phone" required>
+                        <label for="phone" class="mx-1">Phone Number</label>
+                    </div>
+
+                    <div class="mb-4 mt-2">
+                        <div class="float-end mx-3">
+                            <input type="radio" name="Gender" id="Male" value="Male">
+                            <label for="Male">Male</label>
+                        </div>
+                        <div class="float-end mx-3">
+                            <input type="radio" name="Gender" id="Female" value="Female">
+                            <label for="Female">Female</label>
+                        </div>
+                        <div class="float-end mx-3">
+                            <input type="radio" name="Gender" id="Nosay" value="Not sure">
+                            <label for="Nosay">Prefer not to say</label>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mt-5">
+                        <input type="text" class="form-control" id="address" name="address" required>
+                        <label for="address" class="mx-1">Address</label>
+                    </div>
+
+                    <div class="row my-4">
+                        <div class="form-floating col-6">
+                            <input type="city" class="form-control" id="city" name="city" required>
+                            <label for="city" class="mx-1">City</label>
+                        </div>
+                        <div class="form-floating col-6">
+                            <input type="text" class="form-control" id="state" name="state" required>
+                            <label for="state" class="mx-1">State</label>
+                        </div>
+                    </div>
+                        <div class="form-floating col-5">
+                            <input type="text" class="form-control" id="pin" name="pin" required>
+                            <label for="pin" class="mx-1">Pin</label>
+                        </div>
+
+                    <button class="btn btn-success rounded-pill w-75 py-2 mt-4 mb-5" type="submit"
+                        id="signup-button">Proceed</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="right"></div>
+
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    -->
+
+    <script>
+
+    </script>
+</body>
+
+</html>
